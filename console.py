@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from datetime import datetime  # Add this import statement
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -10,7 +11,6 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -73,8 +73,8 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
-                            and type(eval(pline)) is dict:
+                    if pline[0] == '{' and pline[-1] =='}'\
+                            and type(eval(pline)) == dict:
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
@@ -114,22 +114,66 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
+        """ Create an object of any class with given parameters"""
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif args.split(' ')[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+
+        # Extract class name and parameters
+        class_name, *params = args.split(' ')
+        
+        # Initialize an empty dictionary to store parameters
+        kwargs = {}
+
+        # Parse parameters:
+        for param in params:
+            # Split each argument by '=' to get key-value pair
+            key, value = param.split('=')
+
+            # Handle value formatting
+            if value.startswith('"') and value.endswith('"'):
+                # Remove surrounding double quotes
+                value = value[1:-1]
+
+                # Replace underscores with spaces
+                value = value.replace('_', ' ')
+
+                # Unescape escaped double quotes
+                value = value.replace('\\"', '"')
+
+            elif '.' in value:
+                try:
+                    # Try converting to float
+                    value = float(value)
+                except ValueError:
+                    continue  # Skip if conversion fails
+            else:
+                try:
+                    # Try converting to int
+                    value = int(value)
+                except ValueError:
+                    continue  # Skip if conversion fails
+
+            # Add key-value pair to kwargs dictionary
+            kwargs[key] = value
+        if 'created_at' not in kwargs:
+            kwargs['created_at'] = datetime.now().isoformat()
+        if 'updated_at' not in kwargs:
+            kwargs['updated_at'] = datetime.now().isoformat()
+
+        # Create an instance of the specified class with the parsed parameters
+        new_instance = HBNBCommand.classes[class_name](**kwargs)
         storage.save()
         print(new_instance.id)
         storage.save()
 
     def help_create(self):
         """ Help information for the create method """
-        print("Creates a class of any type")
-        print("[Usage]: create <className>\n")
+        print("Creates a class of any type with given parameters")
+        print("[Usage]: create <className> <param1>=<value1> <param2>=<value2> ...\n")
 
     def do_show(self, args):
         """ Method to show an individual object """
@@ -272,7 +316,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +324,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg

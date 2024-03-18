@@ -7,6 +7,10 @@ from datetime import datetime
 class BaseModel:
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
+        if kwargs.get('__class__'):
+            del kwargs['__class__']
+    # Rest of the __init__ method implementation...
+
         """Instatntiates a new model"""
         if not kwargs:
             from models import storage
