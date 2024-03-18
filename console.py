@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from datetime import datetime  # Import datetime module
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -118,22 +119,25 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif args.split(' ')[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
 
         # Split arguments by space to separate class name and parameters
         args_list = args.split(' ')
         class_name = args_list[0]
-        params = args_list[1:]
+        params = ' '.join(args_list[1:])
 
         # Initialize a dictionary to hold the parameters
         params_dict = {}
 
         # Parse each parameter
-        for param in params:
+        for param in params.split(','):
             # Split parameter into key and value
             key, value = param.split('=')
+            # Strip whitespace from key and value
+            key = key.strip()
+            value = value.strip()
             # Replace underscores with spaces in the value
             value = value.replace('_', ' ')
             # Determine the type of the value
@@ -148,6 +152,10 @@ class HBNBCommand(cmd.Cmd):
                 value = int(value)
             # Add the parameter to the dictionary
             params_dict[key] = value
+        # Add the 'created_at' attribute as a formatted string
+        params_dict['created_at'] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        # Add the 'updated_at' attribute with the same value as 'created_at'
+        params_dict['updated_at'] = params_dict['created_at']
 
         # Create a new instance of the class with the parameters
         new_instance = HBNBCommand.classes[class_name](**params_dict)
@@ -352,3 +360,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
+
