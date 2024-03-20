@@ -232,7 +232,7 @@ class HBNBCommand(cmd.Cmd):
         """Updates an object with new information"""
         c_name = c_id = att_name = att_val = kwargs = ''
 
-        # isolate cls from id/args, e.g., (<cls>, delimiter, <id/args>)
+        # isolate cls from id/args
         args = args.partition(" ")
         if args[0]:
             c_name = args[0]
@@ -262,7 +262,7 @@ class HBNBCommand(cmd.Cmd):
         # determine if kwargs or args
         if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
             kwargs = eval(args[2])
-            args = []  # reformat kwargs into list, e.g., [<name>, <value>, ...]
+            args = []  # reformat kwargs into list
             for k, v in kwargs.items():
                 args.append(k)
                 args.append(v)
