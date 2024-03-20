@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""A module with the base model class for AirBnB"""
+"""Module containing the base model class for AirBnB"""
 
 import uuid
 import models
@@ -13,14 +13,14 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """A class that defines all common attributes of other classes"""
+    """A class defining common attributes for other classes"""
 
     id = Column(String(60), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
     updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
 
     def __init__(self, *args, **kwargs):
-        """Instantiation of base model class"""
+        """Instantiates the base model class"""
 
         if kwargs:
             for key, val in kwargs.items():
@@ -44,25 +44,25 @@ class BaseModel:
             self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
-        """A fn that returns a string"""
+        """Returns a string representation of the object"""
 
         return "[{}] ({}) {}".format(
             type(self).__name__, self.id, self.__dict__)
 
     def __repr__(self):
-        """A fn that return a string representaion"""
+        """Returns a string representation of the object"""
 
         return self.__str__()
 
     def save(self):
-        """updates the public instance attribute updated_at to current"""
+        """Updates the updated_at attribute to the current datetime"""
 
         self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
-        """A fn thatcreates dictionary of the class  and returns"""
+        """Creates a dictionary representation of the class"""
 
         custom_dict = dict(self.__dict__)
         custom_dict["__class__"] = str(type(self).__name__)
@@ -73,6 +73,6 @@ class BaseModel:
         return custom_dict
 
     def delete(self):
-        """A fn that deletes object"""
+        """Deletes the object"""
 
         models.storage.delete(self)

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-""" State Module for HBNB project """
+"""Module for representing states in the HBNB project."""
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
@@ -9,7 +9,7 @@ from models.place import place_amenity
 
 
 class Amenity(BaseModel, Base):
-    """A class for class for Amenity"""
+    """A class representing amenities in the HBNB project."""
 
     __tablename__ = "amenities"
     name = Column(String(128), nullable=False)

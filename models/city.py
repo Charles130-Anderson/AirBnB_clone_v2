@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""A module with the city class"""
+"""Module containing the City class"""
 
 from sqlalchemy.ext.declarative import declarative_base
 from models.place import Place
@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 
 
 class City(BaseModel, Base):
-    """A class that represents a city"""
+    """A class representing a city"""
 
     __tablename__ = "cities"
     name = Column(String(128), nullable=False)
