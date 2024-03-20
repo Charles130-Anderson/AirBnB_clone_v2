@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""A module with the place class"""
+"""A module containing the Place class"""
 
 import models
 from os import getenv
@@ -22,7 +22,7 @@ place_amenity = Table("place_amenity", Base.metadata,
 
 
 class Place(BaseModel, Base):
-    """A class for Place"""
+    """A class representing a place"""
 
     __tablename__ = "places"
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
@@ -47,7 +47,7 @@ class Place(BaseModel, Base):
     else:
         @property
         def reviews(self):
-            """A fn that Returns list of reviews.id """
+            """A method that returns a list of reviews IDs"""
 
             variable = models.storage.all()
             lista = []
@@ -66,13 +66,13 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
-            """A fn that returns list of amenity ids"""
+            """A method that returns a list of amenity IDs"""
 
             return self.amenity_ids
 
         @amenities.setter
         def amenities(self, obj=None):
-            """a fn that appends amenity ids to the attribute"""
+            """A method that appends amenity IDs to the attribute"""
 
             if type(obj) is Amenity and obj.id not in self.amenity_ids:
                 self.amenity_ids.append(obj.id)

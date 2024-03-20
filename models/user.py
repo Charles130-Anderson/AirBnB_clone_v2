@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""A module with the class user"""
+"""A module containing the User class"""
 
 from models.place import Place
 from sqlalchemy.orm import relationship
@@ -11,7 +11,7 @@ from models.review import Review
 
 
 class User(BaseModel, Base):
-    """A class with the user att"""
+    """A class representing a user with attributes"""
 
     __tablename__ = "users"
     email = Column(String(128), nullable=False)
