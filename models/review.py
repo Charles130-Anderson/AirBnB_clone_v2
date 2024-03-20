@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""A module with the class review"""
+"""A module containing the Review class"""
 
 from models.base_model import BaseModel, Base
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,7 +8,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Float
 
 
 class Review(BaseModel, Base):
-    """A review class"""
+    """A class representing a review"""
 
     __tablename__ = "reviews"
     text = Column(String(1024), nullable=False)

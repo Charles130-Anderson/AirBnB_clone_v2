@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""A function that create a unique FileStorage instance for your app"""
+
+"""A module that contains code to create a unique storage instance for the app"""
 
 from models.engine.file_storage import FileStorage
 from os import getenv
