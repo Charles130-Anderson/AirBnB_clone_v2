@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""A module that has the state class"""
+"""A module containing the State class"""
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
@@ -12,7 +12,7 @@ from models.city import City
 
 
 class State(BaseModel, Base):
-    """A class for State"""
+    """A class representing a state"""
 
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
@@ -21,6 +21,8 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
+        """A method that returns the list of the state"""
+
         variable = models.storage.all()
         lista = []
         res = []
@@ -35,4 +37,4 @@ class State(BaseModel, Base):
             if (elements.state_id == self.id):
                 res.append(elements)
 
-        return (res)
+        return res
