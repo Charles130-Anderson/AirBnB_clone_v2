@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """A module for Fabric script that generates a .tgz archive."""
+
 import os
 from datetime import datetime
 from fabric.api import *
 
+
 def do_pack():
+    """
+    Making an archive on web_static folder.
+    """
     local('sudo mkdir -p versions')
 
     time = datetime.now()
