@@ -1,28 +1,29 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """A module for Fabric script that generates a .tgz archive."""
-
 import os
 from datetime import datetime
-from fabric.api import *
+from fabric.api import local, runs_once
 
 
+@runs_once
 def do_pack():
-    """
-    Making an archive on web_static folder.
-    """
-    local('sudo mkdir -p versions')
-
-    time = datetime.now()
-    time_string = time.strftime('%Y%m%d%H%M%S')
-
-    output_path = 'versions/web_static_{}.tgz'.format(time_string)
-
+    """Archives the static files."""
+    if not os.path.isdir("versions"):
+        os.mkdir("versions")
+    d_time = datetime.now()
+    output = "versions/web_static_{}{}{}{}{}{}.tgz".format(
+        d_time.year,
+        d_time.month,
+        d_time.day,
+        d_time.hour,
+        d_time.minute,
+        d_time.second
+    )
     try:
-        print("Packing web_static to {}".format(output_path))
-        local('tar -cvzf {} web_static'.format(output_path))
-        file_size = os.path.getsize(output_path)
-        print("web_static packed: {} -> {} Bytes".format(output_path, file_size))
-        return output_path
-    except Exception as e:
-        print("Error occurred during packing: {}".format(str(e)))
-        return None
+        print("Packing web_static to {}".format(output))
+        local("tar -cvzf {} web_static".format(output))
+        size = os.stat(output).st_size
+        print("web_static packed: {} -> {} Bytes".format(output, size))
+    except Exception:
+        output = None
+    return output
