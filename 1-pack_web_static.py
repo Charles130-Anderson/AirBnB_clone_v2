@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""A module for Fabric script that generates a .tgz archive."""
 import os
 from datetime import datetime
 from fabric.api import *
@@ -15,4 +15,3 @@ def do_pack():
 
     file_path = f"versions/web_static_{time_string}.tgz"
     file_size = os.path.getsize(file_path)
-    print(f"web_static packed: {file_path} -> {file_size}Bytes")
