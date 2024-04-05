@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
+
 # The script sets up a web server for deployment of web_static.
 
+# Update repositories and install Nginx
 sudo apt-get update
 sudo apt-get -y install nginx
 sudo ufw allow 'Nginx HTTP'
 
+# Create necessary directories
 sudo mkdir -p /data/
 sudo mkdir -p /data/web_static/
 sudo mkdir -p /data/web_static/releases/
 sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
+
+# Create a simple HTML file
 sudo touch /data/web_static/releases/test/index.html
 sudo echo "<html>
   <head>
@@ -19,10 +24,14 @@ sudo echo "<html>
   </body>
 </html>" | sudo tee /data/web_static/releases/test/index.html
 
-sudo chown -R ubuntu:ubuntu /data/
-
+# Create symbolic link
 sudo ln -s -f /data/web_static/releases/test/ /data/web_static/current
 
+# Set ownership
+sudo chown -R ubuntu:ubuntu /data/
+
+# Update Nginx configuration
 sudo sed -i '/listen 80 default_server/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
 
+# Restart nginx
 sudo service nginx restart
