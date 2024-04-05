@@ -2,8 +2,6 @@
 """
 A Fabric script, built upon the file 2-do_deploy_web_static.py,
 which generates and distributes an archive to the web servers.
-
-To execute, use the following command: fab -f 3-deploy_web_static.py deploy -i ~/.ssh/school -u ubuntu
 """
 
 from fabric.api import env, local, put, run
