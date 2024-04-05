@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-A Fabric script built upon the file 1-pack_web_static.py, which disseminates an archive to the web servers.
+A Fabric script to disseminates an archive to web-01 and web-02.
 """
 
 from fabric.api import put, run, env
