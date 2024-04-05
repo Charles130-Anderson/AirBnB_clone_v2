@@ -6,7 +6,7 @@ from fabric.api import local, runs_once
 
 
 def do_pack():
-    """Archives the static files."""
+    """Creates an archive for the static files."""
     if not os.path.isdir("versions"):
         os.mkdir("versions")
     date_time = datetime.now()
