@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""A module for Fabric script that generates a .tgz archive."""
+"""A module designed for a Fabric script aimed at creating a .tgz archive."""
 import os
 from datetime import datetime
 from fabric.api import local, runs_once
@@ -10,14 +10,14 @@ def do_pack():
     """Archives the static files."""
     if not os.path.isdir("versions"):
         os.mkdir("versions")
-    d_time = datetime.now()
+    date_time = datetime.now()
     output = "versions/web_static_{}{}{}{}{}{}.tgz".format(
-        d_time.year,
-        d_time.month,
-        d_time.day,
-        d_time.hour,
-        d_time.minute,
-        d_time.second
+        date_time.year,
+        date_time.month,
+        date_time.day,
+        date_time.hour,
+        date_time.minute,
+        date_time.second
     )
     try:
         print("Packing web_static to {}".format(output))
