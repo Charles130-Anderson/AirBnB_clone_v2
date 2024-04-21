@@ -1,40 +1,35 @@
 #!/usr/bin/python3
-
-"""A module containing the State class"""
-
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
-import models
-import shlex
+"""This is the state class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy.orm import relationship
 from models.city import City
+from sqlalchemy import Column, Integer, String, ForeignKey, MetaData
+from sqlalchemy.orm import relationship, backref
+import models
+from os import environ
 
 
 class State(BaseModel, Base):
-    """A class representing a state"""
-
-    __tablename__ = "states"
+    """This is the class for State
+    Attributes:
+        name: input name
+    """
+    __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade='all, delete, delete-orphan',
-                          backref="state")
 
-    @property
-    def cities(self):
-        """A method that returns the list of the state"""
+    if environ.get('HBNB_TYPE_STORAGE') == "db":
+        cities = relationship("City",
+                              backref="state",
+                              cascade="all, delete, delete-orphan")
+    else:
 
-        variable = models.storage.all()
-        lista = []
-        res = []
-        for key in variable:
-            city = key.replace('.', ' ')
-            city = shlex.split(city)
+        @property
+        def cities(self):
+            """ Returns the list of City instances with
+            state_id == current State.id """
+            all_cities = models.storage.all(City)
+            state_cities = []
+            for city_ins in all_cities.values():
+                if city_ins.state_id == self.id:
+                    state_cities.append(city_ins)
 
-            if (city[0] == 'City'):
-                lista.append(variable[key])
-
-        for elements in lista:
-            if (elements.state_id == self.id):
-                res.append(elements)
-
-        return res
+            return state_cities
